@@ -34,7 +34,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Redot\\LaravelToastify\\LaravelLangExtractorServiceProvider"
+                "Redot\\LaravelLangExtractor\\LaravelLangExtractorServiceProvider"
             ]
         }
     }
