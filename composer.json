@@ -1,0 +1,41 @@
+{
+    "name": "redot/laravel-lang-extractor",
+    "description": "A Laravel package to extract language keys from your project files and generate a language file from them.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Abdelrhman Said",
+            "email": "abdelrhmansaidzaki@hotmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Redot\\LaravelLangExtractor\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "require": {
+        "php": "^8.1",
+        "illuminate/console": "^10.0",
+        "illuminate/support": "^10.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.10"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "lint": "vendor/bin/pint"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Redot\\LaravelToastify\\LaravelLangExtractorServiceProvider"
+            ]
+        }
+    }
+}
