@@ -18,6 +18,11 @@ class LangExtractor
     protected array $directories = [];
 
     /**
+     * File extensions to search for.
+     */
+    protected array $extensions = ['php'];
+
+    /**
      * Translations extracted from blade files.
      */
     protected array $translations = [];
@@ -41,7 +46,27 @@ class LangExtractor
      */
     public function searchIn(string ...$directories): static
     {
-        $this->directories = $directories;
+        foreach ($directories as $directory) {
+            if (! in_array($directory, $this->directories)) {
+                $this->directories[] = $directory;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the file extensions to search for.
+     */
+    public function withExtensions(string ...$extensions): static
+    {
+        foreach ($extensions as $extension) {
+            $extension = ltrim(strtolower($extension), '.');
+
+            if (! in_array($extension, $this->extensions)) {
+                $this->extensions[] = $extension;
+            }
+        }
 
         return $this;
     }
@@ -65,7 +90,7 @@ class LangExtractor
         $translations = collect();
 
         $files = Finder::create()->files()->ignoreVCSIgnored(true);
-        $files->in($this->directories)->name('*.php');
+        $files->in($this->directories)->name('*.' . implode(', *.', $this->extensions));
 
         foreach ($files as $file) {
             preg_match_all($this->pattern, $file->getContents(), $matches);
