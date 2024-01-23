@@ -20,7 +20,7 @@ class LangExtractor
     /**
      * File extensions to search for.
      */
-    protected array $extensions = ['php'];
+    protected array $extensions = [];
 
     /**
      * Translations extracted from blade files.
@@ -30,12 +30,16 @@ class LangExtractor
     /**
      * Create a new instance.
      */
-    public function __construct($directories = [])
+    public function __construct($directories = [], $extensions = [])
     {
         $this->directories = $directories;
 
         if (count($this->directories) === 0) {
             $this->searchIn(resource_path(), app_path('Http'), app_path('Livewire'));
+        }
+
+        if (count($extensions) > 0) {
+            $this->withExtensions('php');
         }
 
         $this->pattern = $this->generatePatternUsing('__', 'trans', '@lang');
@@ -90,7 +94,7 @@ class LangExtractor
         $translations = collect();
 
         $files = Finder::create()->files()->ignoreVCSIgnored(true);
-        $files->in($this->directories)->name('*.' . implode(', *.', $this->extensions));
+        $files->in($this->directories)->name(array_map(fn ($extension) => '*.' . $extension, $this->extensions));
 
         foreach ($files as $file) {
             preg_match_all($this->pattern, $file->getContents(), $matches);
